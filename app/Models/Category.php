@@ -35,4 +35,16 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function items()
+    {
+        $items = collect();
+        if ($this->hasChildren()) {
+            foreach ($this->children as $child) {
+                $items = $items->merge($child->products);
+            }
+        }
+        $items = $items->merge($this->products);
+        return $items;
+    }
 }
